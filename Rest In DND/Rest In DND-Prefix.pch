@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'Rest In DND' target in the 'Rest In DND' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
