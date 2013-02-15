@@ -12,7 +12,7 @@
 #define NOTIFICATION_CENTER_APPID "com.apple.notificationcenterui"
 #define NOTIFICATION_CENTER_DND "doNotDisturb"
 #define NOTIFICATION_CENTER_DND_DATE "doNotDisturbDate"
-#define SECOND_PER_MIN 5
+#define SECOND_PER_MIN 60
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
     CFStringRef ncAppID, ncDND, ncDNDDate;
