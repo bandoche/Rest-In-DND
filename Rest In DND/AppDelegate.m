@@ -26,6 +26,27 @@
     // Insert code here to initialize your application
 }
 
+
+- (void) turnOnNCWithShell:(NSInteger) delaySecond {
+    NSString *delayMinStr = [NSString stringWithFormat:@"%ld", (delaySecond)];
+
+    NSBundle *thisBundle = [NSBundle mainBundle];
+    NSString *filePath = nil;
+    
+    if ((filePath = [thisBundle pathForResource:@"notification_center_on" ofType:@"sh"]))  {
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [self runShell:@"/bin/sh" withArg:[NSArray arrayWithObjects:filePath, delayMinStr, nil]];
+            
+            // Perform Task back in the main thread
+            //            [viewController updateStuff:stuff];
+        });
+        // when completed, it is the developer's responsibility to release theContents
+    }
+
+}
+
 - (void) runShell:(NSString*)strCommand withArg:(NSArray*)arrArgs{
     NSTask *task;
     task = [[NSTask alloc] init];
@@ -43,15 +64,15 @@
     
     [task launch];
     
-    NSData *data;
-    data = [file readDataToEndOfFile];
+//    NSData *data;
+//    data = [file readDataToEndOfFile];
+//    
+//    NSString *string;
+//    string = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+//    //    NSLog (@"returned:\n%@", string);
     
-    NSString *string;
-    string = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
-    //    NSLog (@"returned:\n%@", string);
-    
-    [string release];
-    [task release];
+//    [string release];
+    [task autorelease];
     
 }
 
@@ -66,7 +87,12 @@
     
     
     [self runShell:@"/bin/launchctl" withArg:[NSArray arrayWithObjects:@"stop", @"com.apple.notificationcenterui.agent", nil]];
-    
+
+    NSInteger delayMinVal = [delayMinute integerValue];
+    if (delayMinVal > 0) {
+        [self turnOnNCWithShell:(delayMinVal * SECOND_PER_MIN)];
+//        [self performSelector:@selector(turnOnNC:) withObject:sender afterDelay:(delayMinVal * SECOND_PER_MIN)];
+    }
     return;
 }
 

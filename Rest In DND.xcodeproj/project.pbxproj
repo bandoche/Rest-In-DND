@@ -13,7 +13,21 @@
 		B11F677E16CE1F09007097EA /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = B11F677C16CE1F09007097EA /* Credits.rtf */; };
 		B11F678116CE1F09007097EA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B11F678016CE1F09007097EA /* AppDelegate.m */; };
 		B11F678416CE1F0A007097EA /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = B11F678216CE1F0A007097EA /* MainMenu.xib */; };
+		B14EB3C316CE2AD200977F6A /* notification_center_on.sh in CopyFiles */ = {isa = PBXBuildFile; fileRef = B14EB3BE16CE271A00977F6A /* notification_center_on.sh */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B14EB3C216CE2AC900977F6A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				B14EB3C316CE2AD200977F6A /* notification_center_on.sh in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		B11F676A16CE1F09007097EA /* Rest In DND.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Rest In DND.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -29,6 +43,7 @@
 		B11F677F16CE1F09007097EA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B11F678016CE1F09007097EA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		B11F678316CE1F0A007097EA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		B14EB3BE16CE271A00977F6A /* notification_center_on.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = notification_center_on.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +99,7 @@
 			children = (
 				B11F677F16CE1F09007097EA /* AppDelegate.h */,
 				B11F678016CE1F09007097EA /* AppDelegate.m */,
+				B14EB3BE16CE271A00977F6A /* notification_center_on.sh */,
 				B11F678216CE1F0A007097EA /* MainMenu.xib */,
 				B11F677416CE1F09007097EA /* Supporting Files */,
 			);
@@ -112,6 +128,7 @@
 				B11F676616CE1F09007097EA /* Sources */,
 				B11F676716CE1F09007097EA /* Frameworks */,
 				B11F676816CE1F09007097EA /* Resources */,
+				B14EB3C216CE2AC900977F6A /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -301,6 +318,7 @@
 				B11F678916CE1F0A007097EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
