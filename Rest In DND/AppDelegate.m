@@ -8,21 +8,41 @@
 
 #import "AppDelegate.h"
 
-#import "AppDelegate.h"
-
 @implementation AppDelegate
+
+@synthesize statusBar = _statusBar, window;
 
 - (void)dealloc
 {
     [super dealloc];
 }
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
-{
+- (void) awakeFromNib {
+    self.statusBar = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
+    
+    self.statusBar.title = @"D";
+    
+    // you can also set an image
+    //self.statusBar.image =
+    
+    self.statusBar.menu = menuBar;
+    self.statusBar.highlightMode = YES;
+    
     ncAppID = CFSTR(NOTIFICATION_CENTER_APPID);
     ncDND = CFSTR(NOTIFICATION_CENTER_DND);
     ncDNDDate = CFSTR(NOTIFICATION_CENTER_DND_DATE);
+    ridAppId = CFSTR(RIDND_APPID);
+
+    [menuBar setAutoenablesItems:NO];
+    [dndMenuItem setTitle:[NSString stringWithFormat:@"%ld분간 방해금지", [self getDNDMinute]]];
     
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+    
+    [delayMinute setTarget:self];
+    [delayMinute setAction:@selector(saveDNDMinute:)];
     // Insert code here to initialize your application
 }
 
@@ -116,4 +136,80 @@
 }
 
 
+// 설정 화면 보이기
+- (IBAction)showSetting:(id)sender {
+    [delayMinute setStringValue:[NSString stringWithFormat:@"%ld", (long)[self getDNDMinute]]];
+    [window makeKeyAndOrderFront:self];
+    [[NSApplication sharedApplication] activateIgnoringOtherApps : YES];
+//    [[NSRunningApplication currentApplication] activateWithOptions:NSApplicationActivateAllWindows];
+//    [[NSRunningApplication currentApplication] activateWithOptions: NSApplicationActivateIgnoringOtherApps];
+}
+
+- (IBAction)saveDNDMinute:(id)sender {
+    NSInteger delayMinVal = [delayMinute integerValue];
+    if (delayMinVal > 0) {
+        [self setDNDMinute:delayMinVal];
+        if ([dndMenuItem isEnabled]) {
+            [dndMenuItem setTitle:[NSString stringWithFormat:@"%ld분간 방해금지", [self getDNDMinute]]];
+        }
+        [window close];
+    } else {
+        NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+        [alert addButtonWithTitle:@"확인"];
+        [alert setMessageText:@"값이 올바르지 않습니다"];
+        [alert setInformativeText:@"자연수를 입력해주세요."];
+        [alert setAlertStyle:NSWarningAlertStyle];
+        [alert beginSheetModalForWindow:window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+    }
+}
+
+- (IBAction)doDelayedDND:(id)sender {
+    
+    [dndMenuItem setTitle:[NSString stringWithFormat:@"%ld분간 방해금지 진행중", [self getDNDMinute]]];
+    [dndMenuItem setEnabled:NO];
+    
+
+    ncDNDDateVal = CFDateCreate( kCFAllocatorDefault, CFAbsoluteTimeGetCurrent());
+    CFPreferencesSetValue(ncDND, kCFBooleanTrue, ncAppID, kCFPreferencesCurrentUser , kCFPreferencesCurrentHost);
+    CFPreferencesSetValue(ncDNDDate, ncDNDDateVal, ncAppID, kCFPreferencesCurrentUser , kCFPreferencesCurrentHost);
+    CFPreferencesSynchronize(ncAppID, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost);
+    
+    [self runShell:@"/bin/launchctl" withArg:[NSArray arrayWithObjects:@"stop", @"com.apple.notificationcenterui.agent", nil]];
+    
+    NSInteger delayMinVal = [self getDNDMinute];
+    if (delayMinVal > 0) {
+        [self performSelector:@selector(enableDNDMenuItem) withObject:nil afterDelay:([self getDNDMinute] * SECOND_PER_MIN)];
+    }
+
+}
+
+- (void) enableDNDMenuItem {
+    [dndMenuItem setEnabled:YES];
+    [dndMenuItem setTitle:[NSString stringWithFormat:@"%ld분간 방해금지", [self getDNDMinute]]];
+    [self turnOnNCWithShell:0];
+}
+
+// plist 에 기록
+- (void) setDNDMinute:(NSInteger)dndMinute {
+    CFNumberRef numValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberNSIntegerType, &dndMinute);
+    CFPreferencesSetAppValue(CFSTR(RIDND_MINUTE), numValue, ridAppId);
+    CFPreferencesAppSynchronize(ridAppId);
+}
+
+// plist에서 가져오기 
+- (NSInteger)getDNDMinute {
+    CFPreferencesAppSynchronize(ridAppId);
+    NSInteger dndMinute = 15;
+    CFPropertyListRef value;
+    
+    /* Initialize the checkbox */
+    value = CFPreferencesCopyAppValue( CFSTR(RIDND_MINUTE),  ridAppId );
+    if ( value && CFGetTypeID(value) == CFNumberGetTypeID()  ) {
+        CFNumberGetValue(value, kCFNumberNSIntegerType, &dndMinute);
+        NSLog(@"%ld", (long)dndMinute);
+        
+    }
+    return dndMinute;
+
+}
 @end
