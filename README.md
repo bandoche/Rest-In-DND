@@ -15,6 +15,10 @@ http://code.google.com/p/rest-in-dnd/downloads/detail?name=Rest%20In%20DND.zip&c
 ###v1.0
 Initial version
 
+###v1.1
+Change to Menu bar application.
+Refurbish UI
+
 ##License
 
 Licensed under the MIT License.
