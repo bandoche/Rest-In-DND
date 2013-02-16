@@ -9,7 +9,7 @@ You can download at following link.
 
 아래 주소에서 받을 수 있습니다.
 
-http://code.google.com/p/rest-in-dnd/downloads/detail?name=Rest%20In%20DND.zip&can=2&q=
+http://code.google.com/p/rest-in-dnd/downloads/list
 
 ##Version
 ###v1.0
